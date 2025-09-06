@@ -1,0 +1,93 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 100% 97%;
+    --foreground: 20 10% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 20 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 10% 10%;
+
+    --primary: 24 100% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 43 100% 68%;
+    --secondary-foreground: 20 10% 10%;
+
+    --muted: 20 10% 96%;
+    --muted-foreground: 20 10% 40%;
+
+    --accent: 359 100% 70%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 20 10% 90%;
+    --input: 20 10% 90%;
+    --ring: 24 100% 65%;
+
+    --radius: 0.75rem;
+  }
+
+  body {
+    @apply bg-background text-foreground font-['Poppins',sans-serif] overflow-x-hidden;
+  }
+  
+  /* Ensure text doesn't overflow on mobile */
+  h1, h2, h3, h4, h5, h6, p, span, div {
+    @apply break-words;
+  }
+}
+
+@layer components {
+  .music-note {
+    @apply inline-block;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .music-note:nth-child(2n) {
+    animation-delay: 0.5s;
+  }
+  
+  .music-note:nth-child(3n) {
+    animation-delay: 1s;
+  }
+  
+  .gradient-text {
+    @apply font-bold text-transparent bg-clip-text bg-gradient-to-r from-brunch-purple via-brunch-pink to-secondary;
+  }
+  
+  .btn-primary {
+    @apply px-4 py-2 sm:px-6 sm:py-3 bg-brunch-purple text-white font-semibold rounded-full hover:bg-opacity-90 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 sm:px-6 sm:py-3 bg-secondary text-black font-semibold rounded-full hover:bg-opacity-90 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+  }
+  
+  /* Responsive container class */
+  .responsive-container {
+    @apply w-full px-4 mx-auto max-w-7xl;
+  }
+  
+  /* Mobile-friendly card styles */
+  .mobile-card {
+    @apply p-3 sm:p-5 break-words;
+  }
+  
+  /* Helper classes for responsive text */
+  .mobile-text {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-heading {
+    @apply text-xl sm:text-2xl md:text-3xl;
+  }
+}
