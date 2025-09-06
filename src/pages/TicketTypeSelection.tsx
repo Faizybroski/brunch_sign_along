@@ -13,7 +13,7 @@ const TicketTypeSelection = () => {
   // const [lowestPrice, setLowestPrice] = React.useState<string | null>(null);
     const [priceMap, setPriceMap] = React.useState<Record<string, number>>({});
 
-  const fetchLowestTierPrice = async () => {
+const fetchLowestTierPrice = async () => {
     // Fetch lowest price per ticket type
 const { data: rows, error } = await supabase
   .from("event_tier_inventory")
@@ -26,9 +26,16 @@ const { data: rows, error } = await supabase
       }
     const newPriceMap: Record<string, number> = {};
   rows?.forEach((row) => {
-    if (!newPriceMap[row.ticket_type] || row.price < newPriceMap[row.ticket_type]) {
-      newPriceMap[row.ticket_type] = row.price;
-    }
+      let typeKey = row.ticket_type.toLowerCase();
+
+  // Map database keys to frontend keys
+  if (typeKey === "general") typeKey = "ga";
+  if (typeKey === "vip") typeKey = "vip";
+  if (typeKey === "premium") typeKey = "premium";
+
+  if (!newPriceMap[typeKey] || row.price < newPriceMap[typeKey]) {
+    newPriceMap[typeKey] = row.price;
+  }
   });
 
   setPriceMap(newPriceMap);
@@ -38,7 +45,7 @@ const { data: rows, error } = await supabase
     if (eventId) {
       fetchLowestTierPrice();
     }
-  })
+  }, [eventId])
 
   if (isLoading) {
     return (
@@ -68,7 +75,7 @@ const { data: rows, error } = await supabase
     {
       icon: Ticket,
       title: 'General Admission',
-      price: priceMap["general"] ? `$${priceMap["general"]}` : "$0",
+      price: priceMap["ga"] ? `$${priceMap["ga"]}` : "$0",
       features: [
         'Show Admission',
         'Inflatable Microphone',
