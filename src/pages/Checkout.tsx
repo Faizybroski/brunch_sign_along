@@ -193,7 +193,7 @@ const Checkout = () => {
               onQuantityChange={handleQuantityChange}
             />
             
-            <Card className="mb-6">
+{/*             <Card className="mb-6">
               <CardContent className="pt-6">
                 <FoodServiceSelection 
                   form={form}
@@ -204,7 +204,7 @@ const Checkout = () => {
                   onToggleFoodService={handleToggleFoodService}
                 />
               </CardContent>
-            </Card>
+            </Card> */}
             
             <Card>
               <CardContent className="pt-6">
