@@ -28,11 +28,11 @@ const TicketCard = ({ tier, ticketType, quantity, onQuantityChange, onBookNow }:
           CURRENT TIER
         </div>
       )}
-      {!tier.primary && !tier.disabled && !tier.soldOut && (
+      {/* {!tier.primary && !tier.disabled && !tier.soldOut && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gray-500 text-white px-4 py-1 rounded-full text-sm">
           UPCOMING TIER
         </div>
-      )}
+      )} */}
       {tier.soldOut && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-sm">
           SOLD OUT
