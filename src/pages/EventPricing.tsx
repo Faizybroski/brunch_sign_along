@@ -17,7 +17,7 @@ const EventPricing = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const ticketType = searchParams.get('type') || 'general';
+  const ticketType = searchParams.get('type') || 'ga';
   
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
   const [includeFoodService, setIncludeFoodService] = useState(false);
@@ -74,8 +74,8 @@ const EventPricing = () => {
       ? eventData[0]?.image_url 
       : (eventData.image || eventData.image_url),
     tiers: Array.isArray(eventData) 
-      ? { general: [], vip: [], premium: [] } 
-      : (eventData.tiers || { general: [], vip: [], premium: [] })
+      ? { ga: [], vip: [], group: [] } 
+      : (eventData.tiers || { ga: [], vip: [], group: [] })
   };
 
   const adjustQuantity = (tierId: string, increment: boolean) => {
@@ -114,6 +114,7 @@ const EventPricing = () => {
   //     console.log(`No ${ticketType} tier data available`);
   //     return [];
   //   }
+
   //   return event.tiers[ticketType as keyof typeof event.tiers].map(tier => ({
   //     ...tier,
   //     soldOut: tier.ticketsLeft === 0
@@ -190,7 +191,7 @@ const EventPricing = () => {
                 />
               ))}
               
-{/*               {tiers.length > 0 && (
+              {/* {tiers.length > 0 && (
                 <div className="md:col-span-3">
                   <FoodServiceSelection
                     form={null} // explicitly pass null to indicate standalone mode

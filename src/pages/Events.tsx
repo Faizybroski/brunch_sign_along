@@ -6,6 +6,7 @@ import EventSelectionCard from '@/components/events/EventSelectionCard';
 import { useEventData } from '@/hooks/useEventData';
 import { Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
+import { supabase } from '@/integrations/supabase/client';
 
 const EventsPage = () => {
   const [searchParams] = useSearchParams();
@@ -82,7 +83,9 @@ useEffect(() => {
   const transformedEvents = React.useMemo(() => {
      if (!events || !Array.isArray(events)) return [];
      
-    return events.map(event => ({
+    return events.map(event => {
+      const lowest = priceMap[event.id] ?? 0;
+      return {
       id: event.id,
       title: event.title,
       date: event.date ? format(new Date(event.date), 'MMMM d, yyyy') : 'TBA',
@@ -95,7 +98,7 @@ useEffect(() => {
       soldOut: event.is_sold_out,
       soldOutTiers: event.is_sold_out ? ["First Release", "Second Release"] : [],
       spots: "Food Service 12:30 PM - 2:00 PM"
-    }));
+    }});
   }, [events, priceMap]);
 
   if (isLoading) {
@@ -140,7 +143,7 @@ useEffect(() => {
               key={event.id} 
               {...event} 
               ticketType={ticketType}
-{/*               getStartingPrice={getStartingPrice} */}
+                // getStartingPrice={getStartingPrice}
             />
           ))}
         </div>

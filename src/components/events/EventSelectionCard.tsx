@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Users, AlertOctagon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 
 interface EventSelectionCardProps {
   id: number;
@@ -25,6 +26,7 @@ const EventSelectionCard = ({
   id,
   title,
   date,
+  currentPrice,
   time,
   location,
   image,
