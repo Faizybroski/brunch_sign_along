@@ -120,9 +120,13 @@ const EventSelectionCard = ({
             variant="default"
             className={`w-full ${soldOut ? 'bg-gray-400 hover:bg-gray-500 cursor-not-allowed' : 'bg-brunch-purple hover:bg-brunch-pink'} text-white transition-colors font-semibold px-4 py-2 rounded-lg shadow-md`}
             onClick={() => navigate(`/pricing/${id}?type=${ticketType || 'ga'}`)}
-            disabled={soldOut}
+            disabled={soldOut || currentPrice === "No tier found"}
           >
-            {soldOut ? 'Sold Out' : 'Select Date'}
+            {soldOut 
+    ? "Sold Out" 
+    : currentPrice === "$0" 
+      ? "No tier found" 
+      : `Select ${title}`}
           </Button>
         </div>
       </div>
