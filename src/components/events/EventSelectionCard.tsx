@@ -32,7 +32,7 @@ const EventSelectionCard = ({
   ticketType,
   soldOut,
   ticketsLeft,
-  getStartingPrice
+  // getStartingPrice
 }: EventSelectionCardProps) => {
   const navigate = useNavigate();
   
@@ -62,9 +62,9 @@ const EventSelectionCard = ({
           width="400" 
           height="192"
         />
-        <div className="absolute top-4 right-4 bg-brunch-pink text-white text-xs font-bold px-3 py-1 rounded-full">
+{/*         <div className="absolute top-4 right-4 bg-brunch-pink text-white text-xs font-bold px-3 py-1 rounded-full">
           {spots}
-        </div>
+        </div> */}
         {ticketType === 'group' && (
           <div className="absolute bottom-4 right-4 bg-brunch-purple text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
             <Users className="h-3 w-3" /> Group VIP Packages
@@ -75,7 +75,7 @@ const EventSelectionCard = ({
         <div className="mb-4 flex items-center justify-center bg-brunch-orange/10 rounded-lg p-3">
           <div className="text-center">
             <div className="text-xl md:text-2xl font-bold text-brunch-orange mb-1">{date}</div>
-            <div className="text-xs md:text-sm text-gray-600">{time}</div>
+            <div className="text-xs md:text-sm text-gray-600">{format(new Date(date), 'MMMM d, yyyy')}</div>
           </div>
         </div>
 
@@ -91,7 +91,7 @@ const EventSelectionCard = ({
           {!soldOut ? (
             <>
               <div className="text-brunch-orange font-bold text-base md:text-lg mb-1">
-                Starting at {getStartingPrice()}
+                Starting at {currentPrice || (ticketType === 'group' ? 'Contact for Pricing' : '$0')}
               </div>
               {ticketType === 'ga' && (
                 <div className="text-xs md:text-sm text-gray-600">
