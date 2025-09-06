@@ -12,6 +12,51 @@ const EventsPage = () => {
   const navigate = useNavigate();
   const ticketType = searchParams.get('type');
   const selectedEventDate = searchParams.get('date');
+  const [priceMap, setPriceMap] = React.useState<Record<string, number>>({});
+
+  const fetchLowestTierPrices = async (type: string | null) => {
+  if (!type) return {};
+
+  let dbType = type;
+  if (type === "ga") dbType = "general";
+  if (type === "vip") dbType = "vip";
+  if (type === "group") dbType = "premium";
+
+  // ✅ Pull all rows for this ticket type across all events
+  const { data: rows, error } = await supabase
+    .from("event_tier_inventory")
+    .select("event_id, ticket_type, price")
+    .eq("ticket_type", dbType);
+
+  if (error) {
+    console.error("Error fetching lowest tier prices: ", error);
+    return {};
+  }
+
+  // ✅ Build a map of lowest price per event
+  const newMap: Record<string, number> = {};
+  rows?.forEach((row) => {
+    if (
+      !newMap[row.event_id] ||
+      row.price < newMap[row.event_id]
+    ) {
+      newMap[row.event_id] = row.price;
+    }
+  });
+
+  return newMap;
+};
+
+useEffect(() => {
+  const loadPrices = async () => {
+    if (!ticketType) return;
+
+    const priceMap = await fetchLowestTierPrices(ticketType);
+    setPriceMap(priceMap);
+  };
+
+  loadPrices();
+}, [ticketType]);
   
   // Use the existing useEventData hook to fetch events dynamically
   const { data: events, isLoading, error } = useEventData();
@@ -22,21 +67,21 @@ const EventsPage = () => {
     }
   }, [selectedEventDate, ticketType, navigate]);
 
-  const getStartingPrice = () => {
-    switch(ticketType) {
-      case 'vip':
-        return '$49';
-      case 'group':
-        return '$499';
-      default:
-        return '$34';
-    }
-  };
+  // const getStartingPrice = () => {
+  //   switch(ticketType) {
+  //     case 'vip':
+  //       return '$49';
+  //     case 'group':
+  //       return '$499';
+  //     default:
+  //       return '$34';
+  //   }
+  // };
 
   // Transform the events data to match the expected format
   const transformedEvents = React.useMemo(() => {
-    if (!events || !Array.isArray(events)) return [];
-    
+     if (!events || !Array.isArray(events)) return [];
+     
     return events.map(event => ({
       id: event.id,
       title: event.title,
@@ -44,14 +89,14 @@ const EventsPage = () => {
       time: event.time,
       location: event.location,
       image: event.image_url,
-      currentPrice: ticketType === 'vip' ? '$55' : '$39',
+      currentPrice: lowest > 0 ? `$${lowest}` : "No tier found",
       currentTier: "Second Release",
       ticketsLeft: event.is_sold_out ? 0 : 25,
       soldOut: event.is_sold_out,
       soldOutTiers: event.is_sold_out ? ["First Release", "Second Release"] : [],
       spots: "Food Service 12:30 PM - 2:00 PM"
     }));
-  }, [events, ticketType]);
+  }, [events, priceMap]);
 
   if (isLoading) {
     return (
@@ -95,7 +140,7 @@ const EventsPage = () => {
               key={event.id} 
               {...event} 
               ticketType={ticketType}
-              getStartingPrice={getStartingPrice}
+{/*               getStartingPrice={getStartingPrice} */}
             />
           ))}
         </div>
