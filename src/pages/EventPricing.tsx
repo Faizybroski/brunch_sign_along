@@ -100,25 +100,56 @@ const EventPricing = () => {
     navigate(`/checkout/${eventId}?type=${ticketType}&tier=${tier}&quantity=${quantity}${foodServiceParams}`);
   };
 
+  // const getPricingTiers = () => {
+  //   if (ticketType === 'group') {
+  //     return [];
+  //   }
+
+  //   if (!event?.tiers) {
+  //     console.log("No tiers data available");
+  //     return [];
+  //   }
+    
+  //   if (!event.tiers[ticketType as keyof typeof event.tiers]) {
+  //     console.log(`No ${ticketType} tier data available`);
+  //     return [];
+  //   }
+  //   return event.tiers[ticketType as keyof typeof event.tiers].map(tier => ({
+  //     ...tier,
+  //     soldOut: tier.ticketsLeft === 0
+  //   }));
+  // };
+
   const getPricingTiers = () => {
-    if (ticketType === 'group') {
-      return [];
+  if (ticketType === 'group') {
+    return [];
+  }
+
+  if (!event?.tiers) return [];
+
+  const tiersData = event.tiers[ticketType as keyof typeof event.tiers] || [];
+
+  let previousHasTickets = false;
+
+  return tiersData.map((tier, index) => {
+    const soldOut = tier.ticketsLeft === 0;
+
+    // If previous tier still has tickets, disable this tier
+    const disabled = previousHasTickets && !soldOut;
+
+    // Update flag: as long as a previous tier still has tickets, 
+    // next tier will remain disabled
+    if (!soldOut) {
+      previousHasTickets = true;
     }
 
-    if (!event?.tiers) {
-      console.log("No tiers data available");
-      return [];
-    }
-    
-    if (!event.tiers[ticketType as keyof typeof event.tiers]) {
-      console.log(`No ${ticketType} tier data available`);
-      return [];
-    }
-    return event.tiers[ticketType as keyof typeof event.tiers].map(tier => ({
+    return {
       ...tier,
-      soldOut: tier.ticketsLeft === 0
-    }));
-  };
+      soldOut,
+      disabled,
+    };
+  });
+};
 
   const tiers = getPricingTiers();
 
@@ -159,7 +190,7 @@ const EventPricing = () => {
                 />
               ))}
               
-              {tiers.length > 0 && (
+{/*               {tiers.length > 0 && (
                 <div className="md:col-span-3">
                   <FoodServiceSelection
                     form={null} // explicitly pass null to indicate standalone mode
@@ -170,7 +201,7 @@ const EventPricing = () => {
                     onToggleFoodService={(include) => setIncludeFoodService(include)}
                   />
                 </div>
-              )}
+              )} */}
             </>
           )}
         </div>
